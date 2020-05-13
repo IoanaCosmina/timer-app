@@ -1,14 +1,17 @@
 import React, { useState, useRef } from 'react';
 import './App.css';
+import soundfile from './assets/gongSound.mp3';
 
 function padTime(time) {
   return time.toString().padStart(2, '0');
 }
 
 function App() {
+  const duration = 25;
   const [title, setTitle] = useState('Ready, set, go!');
-  const [timeLeft, setTimeLeft] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(duration * 60);
   const [isRunning, setIsRunning] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
   const intervalRef = useRef(null);
 
   const minutes = padTime(Math.floor(timeLeft / 60));
@@ -20,17 +23,19 @@ function App() {
 
     setTitle('You can do it!');
     setIsRunning(true);
+    setIsComplete(false);
     intervalRef.current = setInterval(() => {
       setTimeLeft(timeLeft => {
         // stop the counter from getting below 0
         if (timeLeft >= 1) return timeLeft - 1;
 
+        setIsComplete(true);
         // reset the timer when the countdown is finished
         resetTimer();
         return 0;
       });
     }, 1000);
-  }
+  };
 
   function stopTimer() {
     // there is no timer started
@@ -41,15 +46,15 @@ function App() {
     // without null, the startTimer won't start again
     intervalRef.current = null;
     setIsRunning(false);
-  }
+  };
 
   function resetTimer() {
     clearInterval(intervalRef.current);
     intervalRef.current = null;
     setTitle('Ready to go another round?');
-    setTimeLeft(25 * 60);
+    setTimeLeft(duration * 60);
     setIsRunning(false);
-  }
+  };
 
   return (
     <div className="app">
@@ -59,6 +64,9 @@ function App() {
         <span>:</span>
         <span>{seconds}</span>
       </div>
+      {
+        isComplete && <audio src={soundfile} autoPlay />
+      }
       <div className="buttons">
         {!isRunning &&
           <button onClick={startTimer}>
@@ -80,6 +88,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
