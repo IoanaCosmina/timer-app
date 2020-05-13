@@ -52,7 +52,6 @@ h2 {
 }
 
 .buttons button:hover {
-  /* border-radius: 10px; */
   background: #FFEDD1;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
