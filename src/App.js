@@ -7,7 +7,8 @@ function padTime(time) {
 
 function App() {
   const [title, setTitle] = useState('Ready, set, go!');
-  const [timeLeft, setTimeLeft] = useState(25 * 60);
+  const [timeLeft, setTimeLeft] = useState(3);
+  const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef(null);
 
   const minutes = padTime(Math.floor(timeLeft / 60));
@@ -18,10 +19,15 @@ function App() {
     if (intervalRef.current !== null) return;
 
     setTitle('You can do it!');
+    setIsRunning(true);
     intervalRef.current = setInterval(() => {
       setTimeLeft(timeLeft => {
         // stop the counter from getting below 0
-        return (timeLeft >= 1) ? timeLeft - 1 : 0;
+        if (timeLeft >= 1) return timeLeft - 1;
+
+        // reset the timer when the countdown is finished
+        resetTimer();
+        return 0;
       });
     }, 1000);
   }
@@ -34,6 +40,7 @@ function App() {
     clearInterval(intervalRef.current);
     // without null, the startTimer won't start again
     intervalRef.current = null;
+    setIsRunning(false);
   }
 
   function resetTimer() {
@@ -41,6 +48,7 @@ function App() {
     intervalRef.current = null;
     setTitle('Ready to go another round?');
     setTimeLeft(25 * 60);
+    setIsRunning(false);
   }
 
   return (
@@ -52,14 +60,19 @@ function App() {
         <span>{seconds}</span>
       </div>
       <div className="buttons">
-        <button onClick={startTimer}>
-          <span>Start</span>
-          <i className="fa fa-play" aria-hidden="true"></i>
-        </button>
-        <button onClick={stopTimer}>
-          <span>Stop</span>
-          <i className="fa fa-stop" aria-hidden="true"></i>
-        </button>
+        {!isRunning &&
+          <button onClick={startTimer}>
+            <span>Start</span>
+            <i className="fa fa-play" aria-hidden="true"></i>
+          </button>
+        }
+        {
+          isRunning &&
+          <button onClick={stopTimer}>
+            <span>Stop</span>
+            <i className="fa fa-stop" aria-hidden="true"></i>
+          </button>
+        }
         <button onClick={resetTimer}>
           <span>Reset</span>
           <i className="fa fa-undo" aria-hidden="true"></i>
