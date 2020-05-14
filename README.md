@@ -7,6 +7,7 @@ The project was bootstrapped with [Create React App](https://github.com/facebook
 You can visit the GitHub project page [here](https://ioanacosmina.github.io/timer-app/) to test the app or just clone the repository.
 
 ## Improvement ideas
-- Add Break timer (5 mins duration)
+- Add Break Timer (5 mins duration)
 - Add Custom Timer component
-- Add To-Do / notes component
+- Add To-Do / Notes component
+- Change color theme
